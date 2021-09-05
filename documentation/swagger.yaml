@@ -1,0 +1,225 @@
+swagger: "2.0"
+info:
+  description: "The API provides simple RESTful HTTP and streaming interfaces for exploring and interacting rides viewing, availability and booking."
+  version: "1.0.0"
+  title: "Rides Information API"
+host: "localhost:8010"
+tags:
+  - name: "rides"
+    description: "Get rides related data with sorting, searching and pagination"
+  - name: "health"
+    description: "Check the availability of RESTful Service"
+schemes:
+  - "http"
+paths:
+  /health:
+    get:
+      tags:
+        - "health"
+      summary: "Simple call to check the availability of Rides Data Service"
+      responses:
+        200:
+          description: "Successful call"
+  /rides:
+    get:
+      tags:
+        - "rides"
+      summary: "Find all rides in the database with sorting, searching and pagination"
+      operationId: "getAllRides"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "pageNumber"
+          in: "path"
+          description: "This is Page number which starts with 0, and should increase by 1 in next call"
+          required: true
+          type: integer
+          format: "int64"
+        - name: "limit"
+          in: "path"
+          description: "This is limits of record should return in one call of API, should be greater then 0 always"
+          required: true
+          type: integer
+          format: "int64"
+        - name: "search"
+          in: "path"
+          description: "This is search key pass if need any key to search in data"
+          required: false
+          type: string
+      responses:
+        200:
+          description: "Data fetched successfully."
+          schema:
+            $ref: "#/definitions/Rides"
+        404:
+          description: "Rides not found"
+        500:
+          description: "Server error"
+    post:
+      tags:
+        - "rides"
+      summary: "Book a ride"
+      description: ""
+      operationId: "createNewRide"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "The longitude of the initial location of the ride. The value must be in between -180 and 180 exclusive"
+          required: true
+          schema:
+            "$ref": "#/definitions/Ride"
+
+      responses:
+        200:
+          description: "Ride creation is successful"
+          schema:
+            "$ref": "#/definitions/RidePost"
+        400:
+          description: "Bad request"
+        500:
+          description: "Server error"
+
+  /rides/{rideId}:
+    get:
+      tags:
+        - "rides"
+      summary: "Find ride by ID"
+      description: "Returns a single ride"
+      operationId: "getRideById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "rideId"
+          in: "path"
+          description: "ID of ride to return"
+          required: true
+          type: integer
+          format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Ride"
+        404:
+          description: "Rides not found"
+        500:
+          description: "Server error"
+
+definitions:
+  Rides:
+    type: object
+    properties:
+      status:
+        type: boolean
+        description: "Status of API can be true or false"
+      message:
+        type: string
+        description: "Message for API response"
+        example: "Data fetched successfully"
+      metadata:
+        type: object
+        properties:
+          totalPageCount:
+            type: integer
+            example: 2
+            description: "Total number of pages with this limit count of records."
+          currentPage:
+            type: integer
+            example: true
+            description: "Current page for next reference."
+      data:
+        type: array
+        items:
+          type: object
+          properties:
+            rideID:
+              type: integer
+              format: "int64"
+              description: "ID of Rider"
+              example: 1
+            startLat:
+              type: integer
+              format: "int64"
+              description: "The start longitude of the ride"
+              example: 21.267553
+            startLong:
+              type: integer
+              format: "int64"
+              description: "The start latitude of the ride"
+              example: 72.960861
+            endLat:
+              type: integer
+              format: "int64"
+              description: "The end longitude of the ride"
+              example: 19.075983
+            endLong:
+              type: integer
+              format: "int64"
+              description: "The end latitude of the ride"
+              example: 72.877655
+            riderName:
+              type: string
+              description: "The name of the rider"
+              example: "George Watkins"
+            driverName:
+              type: string
+              description: "The name of the driver"
+              example: "Roy Miller"
+            driverVehicle:
+              type: string
+              description: "The vehicle number of ride"
+              example: "GJ05RM4297"
+            created:
+              type: string
+              format: date-time
+  Ride:
+    type: object
+    properties:
+      startLat:
+        type: integer
+        format: "int64"
+        description: "The start longitude of the ride"
+        example: 21.267553
+      startLong:
+        type: integer
+        format: "int64"
+        description: "The start latitude of the ride"
+        example: 72.960861
+      endLat:
+        type: integer
+        format: "int64"
+        description: "The end longitude of the ride"
+        example: 19.075983
+      endLong:
+        type: integer
+        format: "int64"
+        description: "The end latitude of the ride"
+        example: 72.877655
+      riderName:
+        type: string
+        description: "The name of the rider"
+        example: "George Watkins"
+      driverName:
+        type: string
+        description: "The name of the driver"
+        example: "Roy Miller"
+      driverVehicle:
+        type: string
+        description: "The vehicle number of ride"
+        example: "GJ05RM4297"
+  RidePost:
+    type: object
+    properties:
+      status:
+        type: boolean
+        description: "Status of API can be true or false"
+        example: true
+      message:
+        type: string
+        description: "Created successfully"
+        example: "Created successfully"
+
