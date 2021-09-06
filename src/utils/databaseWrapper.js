@@ -40,10 +40,10 @@ const rides = (db) => {
    */
   const runDBAllAsync = (db, script) => {
     return new Promise((resolve, reject) => {
-      logger.info("script: "+script);
+      logger.info('script: '+script);
       db.all(script, (err, rows) => {
         if (err) {
-          logger.info("err: "+err);
+          logger.info('err: '+err);
           reject(err);
         }
         resolve(rows);
@@ -63,7 +63,7 @@ const rides = (db) => {
     return new Promise((resolve, reject) => {
       db.run(script, values, function(err) {
         if (err) {
-          console.log(err)
+          console.log(err);
           reject(err);
         }
         // eslint-disable-next-line no-invalid-this
@@ -77,11 +77,11 @@ const rides = (db) => {
    *
    * @return {Promise<any>} - all rows from ride table
    */
-  const getAllRides = async (pageNumber,limit,search) => {
-    pageNumber===undefined?pageNumber=1:pageNumber
-    limit===undefined?limit=1:limit
-    logger.info(constant.DB_SCRIPTS.getAllRides(pageNumber,limit,search));
-    return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides(pageNumber,limit,search));
+  const getAllRides = async (pageNumber, limit, search) => {
+    pageNumber===undefined?pageNumber=1:pageNumber;
+    limit===undefined?limit=1:limit;
+    logger.info(constant.DB_SCRIPTS.getAllRides(pageNumber, limit, search));
+    return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides(pageNumber, limit, search));
   };
 
   /**
@@ -102,7 +102,7 @@ const rides = (db) => {
    */
   const createNewRide = async (values) => {
     logger.info('Creating a new ride from database');
-    logger.info(constant.DB_SCRIPTS.createRide(),values);
+    logger.info(constant.DB_SCRIPTS.createRide(), values);
     return await runDBRunAsync(db, values, constant.DB_SCRIPTS.createRide());
   };
   return {

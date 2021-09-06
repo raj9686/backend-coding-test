@@ -20,19 +20,19 @@ const rideController = (db) => {
    * number, size: number, data: *}}
    */
   const paginate = (data, pageNo=1, size=10) => {
-/*    const totalPages = Math.ceil(data.length / size);
+    /*    const totalPages = Math.ceil(data.length / size);
 
     // ensure current page isn't out of range
     if (pageNo > totalPages) {
       pageNo = totalPages;
     }*/
-    let pageNumber = 0;
+    const pageNumber = 0;
     return {
       status: true,
-      message: "Data fetched successfully",
-      metadata:{
-        totalPageCount:1,
-        currentPage:1,
+      message: 'Data fetched successfully',
+      metadata: {
+        totalPageCount: 1,
+        currentPage: 1,
       },
       data: data,
     };
@@ -57,13 +57,13 @@ const rideController = (db) => {
     }
 
     // Sanitizing request.
-    let pageNumber = req.query.pageNumber && Number(req.query.pageNumber);
+    const pageNumber = req.query.pageNumber && Number(req.query.pageNumber);
     const limit = req.query.limit && Number(req.query.limit);
     const search = (req.query.search!==undefined?req.query.search:'' );
     // Business logic
     try {
-      logger.error({pageNumber, limit, search})
-      const rows = await ridesDatabase.getAllRides(pageNumber,limit,search);
+      logger.error({pageNumber, limit, search});
+      const rows = await ridesDatabase.getAllRides(pageNumber, limit, search);
       if (rows.length === 0) {
         logger.error('Rides not found');
         return res
@@ -75,10 +75,10 @@ const rideController = (db) => {
           .status(constant.HTTP_CODE.SUCCESSFUL)
           .send({
             status: true,
-            message: "Data fetched successfully",
-            metadata:{
-              totalPageCount:1,
-              currentPage:1,
+            message: 'Data fetched successfully',
+            metadata: {
+              totalPageCount: 1,
+              currentPage: 1,
             },
             data: rows,
           });
@@ -166,15 +166,14 @@ const rideController = (db) => {
     try {
       const riderId = await ridesDatabase.createNewRide(values);
       const result = await ridesDatabase.getRideById(riderId);
-      logger.error("result[0]",result[0])
+      logger.error('result[0]', result[0]);
       return res
           .status(constant.HTTP_CODE.CREATED)
           .send({
-            "status": true,
-            "message": "Created successfully",
-            "data":result[0]
+            'status': true,
+            'message': 'Created successfully',
+            'data': result[0],
           });
-
     } catch (err) {
       logger.error(err);
       return res
