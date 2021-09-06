@@ -17,7 +17,7 @@ Below will be your set of tasks to accomplish. Please work on each of these task
 
 1. [Documentation](#documentation) - DONE [click here](https://raj9686.github.io/backend-coding-test/index.html)
 2. [Implement Tooling](#implement-tooling) - DONE
-3. [Implement Pagination](#implement-pagination)
+3. [Implement Pagination](#implement-pagination) - DONE
 4. [Refactoring](#refactoring)
 5. [Security](#security)
 6. [Load Testing](#load-testing)
