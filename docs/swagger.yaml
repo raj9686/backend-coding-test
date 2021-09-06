@@ -24,7 +24,7 @@ paths:
     get:
       tags:
         - "rides"
-      summary: "Find all rides in the database with sorting, searching and pagination"
+      summary: "Find all rides in the database with searching and pagination"
       operationId: "getAllRides"
       produces:
         - "application/json"
@@ -129,7 +129,7 @@ definitions:
             description: "Total number of pages with this limit count of records."
           currentPage:
             type: integer
-            example: true
+            example: 1
             description: "Current page for next reference."
       data:
         type: array
