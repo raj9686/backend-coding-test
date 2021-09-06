@@ -16,7 +16,7 @@ The goal of these exercises are to assess your proficiency in software engineeri
 Below will be your set of tasks to accomplish. Please work on each of these tasks in order. Success criteria will be defined clearly for each task
 
 1. [Documentation](#documentation) - DONE [click here](https://raj9686.github.io/backend-coding-test/index.html)
-2. [Implement Tooling](#implement-tooling)
+2. [Implement Tooling](#implement-tooling) - DONE
 3. [Implement Pagination](#implement-pagination)
 4. [Refactoring](#refactoring)
 5. [Security](#security)
