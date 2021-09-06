@@ -19,7 +19,6 @@ describe('API tests', () => {
             done();
         });
     });
-
     describe('GET /health', () => {
         it('should return health', (done) => {
             request(app)
@@ -35,7 +34,7 @@ describe('API tests', () => {
                 .get('/rides')
                 .expect(200)
                 .expect((res) => {
-                    assert(res.body.errorCode === 'RIDES NOT FOUND ERROR');
+                    assert(res.body.errorCode === 'QUERY_ERROR');
                 })
                 .end(done);
         });
@@ -45,7 +44,7 @@ describe('API tests', () => {
                 .get('/rides')
                 .expect(200)
                 .expect((res) => {
-                    assert(res.body.errorCode === 'RIDES NOT FOUND ERROR');
+                    assert(res.body.errorCode === 'QUERY_ERROR');
                 })
                 .end(done);
         });
@@ -67,9 +66,35 @@ describe('API tests', () => {
                 .then((res) => {
                     request(app)
                         .get(`/rides`)
+                        .query({ limit: 1,pageNumber:1 })
                         .expect(200)
                         .expect((getResponse) => {
-                            assert(getResponse.body[0].rideID === res.body.rideID);
+                            assert(getResponse.body.status);
+                        })
+                        .end(done);
+                });
+        });
+        it('should return fine with search', (done) => {
+            request(app)
+                .post('/rides')
+                .send({
+                    "startLat": 90,
+                    "startLong": 100,
+                    "endLat": 45,
+                    "endLong": 65,
+                    "riderName": "Bob Marakis",
+                    "driverName": "Joy Walter",
+                    "driverVehicle": "XD054585"
+                })
+                .set('Content-Type', 'application/json')
+                .expect(200)
+                .then((res) => {
+                    request(app)
+                        .get(`/rides`)
+                        .query({ limit: 1,pageNumber:1,search:'Bob' })
+                        .expect(200)
+                        .expect((getResponse) => {
+                            assert(getResponse.body.status);
                         })
                         .end(done);
                 });
@@ -79,10 +104,10 @@ describe('API tests', () => {
     describe('GET /rides/{id}', () => {
         it('should return not found', (done) => {
             request(app)
-                .get('/rides/1')
+                .get('/rides/-1')
                 .expect(200)
                 .expect((res) => {
-                    assert(res.body.errorCode === 'RIDES NOT FOUND ERROR');
+                    assert(res.body.errorCode === 'RIDES_NOT_FOUND_ERROR');
                 })
                 .end(done);
         });
@@ -119,18 +144,18 @@ describe('API tests', () => {
             request(app)
                 .post('/rides')
                 .send({
-                    "startLat": 90,
-                    "startLong": 100,
-                    "endLat": 45,
-                    "endLong": 65,
-                    "riderName": "Bob Marakis",
-                    "driverName": "Joy Walter",
-                    "driverVehicle": "XD054585"
+                    "startLat": 21.267553,
+                    "startLong": 72.960861,
+                    "endLat": 19.075983,
+                    "endLong": 72.877655,
+                    "riderName": "George Watkins",
+                    "driverName": "Roy Miller",
+                    "driverVehicle": "GJ05RM4297"
                 })
                 .set('Content-Type', 'application/json')
                 .expect(200)
                 .expect((res) => {
-                    assert(res.body.rideID != null);
+                    assert(res.body.data.rideID != null);
                 })
                 .end(done);
         });
@@ -139,8 +164,8 @@ describe('API tests', () => {
             request(app)
                 .post('/rides')
                 .send({
-                    "startLat": 90,
-                    "startLong": 100,
+                    "startLat": -91,
+                    "startLong": 181,
                     "endLat": 45,
                     "endLong": 65,
                     "riderName": "Bob Marakis",
@@ -149,7 +174,7 @@ describe('API tests', () => {
                 })
                 .set('Content-Type', 'application/json')
                 .expect((res) => {
-                    assert(res.body.errorCode === 'VALIDATION ERROR');
+                    assert(res.body.errorCode === 'VALIDATION_ERROR');
                 })
                 .end(done);
         });
@@ -160,15 +185,15 @@ describe('API tests', () => {
                 .send({
                     "startLat": 90,
                     "startLong": 100,
-                    "endLat": 45,
-                    "endLong": 65,
+                    "endLat": -91,
+                    "endLong": 181,
                     "riderName": "Bob Marakis",
                     "driverName": "Joy Walter",
                     "driverVehicle": "XD054585"
                 })
                 .set('Content-Type', 'application/json')
                 .expect((res) => {
-                    assert(res.body.errorCode === 'VALIDATION ERROR');
+                    assert(res.body.errorCode === 'VALIDATION_ERROR');
                 })
                 .end(done);
         });
@@ -181,13 +206,13 @@ describe('API tests', () => {
                     "startLong": 100,
                     "endLat": 45,
                     "endLong": 65,
-                    "riderName": "Bob Marakis",
+                    "riderName": "",
                     "driverName": "Joy Walter",
                     "driverVehicle": "XD054585"
                 })
                 .set('Content-Type', 'application/json')
                 .expect((res) => {
-                    assert(res.body.errorCode === 'VALIDATION ERROR');
+                    assert(res.body.errorCode === 'VALIDATION_ERROR');
                 })
                 .end(done);
         });
@@ -201,17 +226,16 @@ describe('API tests', () => {
                     "endLat": 45,
                     "endLong": 65,
                     "riderName": "Bob Marakis",
-                    "driverName": "Joy Walter",
+                    "driverName": "",
                     "driverVehicle": "XD054585"
                 })
                 .set('Content-Type', 'application/json')
                 .expect((res) => {
-                    assert(res.body.errorCode === 'VALIDATION ERROR');
+                    assert(res.body.errorCode === 'VALIDATION_ERROR');
                 })
                 .end(done);
         });
-
-        it('should fail with invalid driver\'s name', (done) => {
+        it('should fail with invalid driverVehicle\'s number', (done) => {
             request(app)
                 .post('/rides')
                 .send({
@@ -221,11 +245,11 @@ describe('API tests', () => {
                     "endLong": 65,
                     "riderName": "Bob Marakis",
                     "driverName": "Joy Walter",
-                    "driverVehicle": "XD054585"
+                    "driverVehicle": ""
                 })
                 .set('Content-Type', 'application/json')
                 .expect((res) => {
-                    assert(res.body.errorCode === 'VALIDATION ERROR');
+                    assert(res.body.errorCode === 'VALIDATION_ERROR');
                 })
                 .end(done);
         });
