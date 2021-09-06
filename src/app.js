@@ -1,13 +1,21 @@
 'use strict';
 
+
 const express = require('express');
 const app = express();
-
+const healthRouts = require('./routs/health');
+const ridesController = require('./routs/rides');
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
 
 module.exports = (db) => {
-  app.get('/health', (req, res) => res.send('Healthy'));
+  const ridesComponent = ridesController(db);
+
+  app.get('/health', healthRouts.get);
+  app.get('/rides', ridesComponent.getRides);
+  app.get('/rides/:id', ridesComponent.getRideById);
+  app.post('/rides', bodyParser.json(), ridesComponent.postRides);
+
+  /* app.get('/health', (req, res) => res.send('Healthy'));
 
   app.post('/rides', jsonParser, (req, res) => {
     const startLat = Number(req.body.startLat);
@@ -117,7 +125,7 @@ module.exports = (db) => {
     const offset = pageNumber * limit;
     let query = '';
     if (search !== '') {
-      query = `SELECT * FROM Rides LIMIT ${offset} ,${limit} 
+      query = `SELECT * FROM Rides LIMIT ${offset} ,${limit}
       WHERE riderName LIKE ${search} OR driverName LIKE ${search}`;
     } else {
       query = `SELECT * FROM Rides LIMIT ${offset} ,${limit}`;
@@ -141,7 +149,7 @@ module.exports = (db) => {
           let hasNextPage = false;
           let mQuery = '';
           if (search !== '') {
-            mQuery = `SELECT COUNT(*) FROM Rides 
+            mQuery = `SELECT COUNT(*) FROM Rides
       WHERE riderName LIKE ${search} OR driverName LIKE ${search}`;
           } else {
             mQuery = `SELECT COUNT(*) FROM Rides`;
@@ -185,7 +193,7 @@ module.exports = (db) => {
 
       res.send(rows);
     });
-  });
+  });*/
 
   return app;
 };
