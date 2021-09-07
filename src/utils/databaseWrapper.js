@@ -35,13 +35,11 @@ const rides = (db) => {
    * Wrapper to run db.all function in promise style
    *
    * @param {sqlite3.Database} db
-   * @param values
+   * @param {string} values
    * @param {string} script of the db operation
    * @return {Promise<any>} result of the db operation
    */
   const runDBAllAsync = (db, values, script) => {
-    logger.info({values, script})
-
     if (values!==null) {
       return new Promise((resolve, reject) => {
         db.all(script, values, (err, rows) => {
@@ -52,9 +50,9 @@ const rides = (db) => {
           resolve(rows);
         });
       });
-    }else {
+    } else {
       return new Promise((resolve, reject) => {
-        db.all(script,  (err, rows) => {
+        db.all(script, (err, rows) => {
           if (err) {
             reject(err);
           }
@@ -93,10 +91,11 @@ const rides = (db) => {
    * @param {string} search of the required details for paging
    */
   const getAllRides = async (pageNumber, limit, search) => {
-    logger.info({pageNumber, limit, search})
+    logger.info({pageNumber, limit, search});
     pageNumber===undefined?pageNumber=1:pageNumber;
     limit===undefined?limit=1:limit;
-    return await runDBAllAsync(db,null, constant.DB_SCRIPTS.getAllRides(pageNumber,
+    return await runDBAllAsync(db, null,
+        constant.DB_SCRIPTS.getAllRides(pageNumber,
         limit, search));
   };
 
@@ -108,7 +107,7 @@ const rides = (db) => {
    */
   const getRideById = async (id) => {
     logger.info(`Getting a ride by id: ${id} from database`);
-    return await runDBAllAsync(db,id, constant.DB_SCRIPTS.getRideById(id));
+    return await runDBAllAsync(db, id, constant.DB_SCRIPTS.getRideById(id));
   };
 
   /**
