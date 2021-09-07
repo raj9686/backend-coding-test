@@ -48,6 +48,14 @@ const DB_SCRIPTS = {
       return `SELECT * FROM Rides LIMIT ${limit}${','+offset>0?offset:''}`;
     }
   },
+  getAllRidesCount: (search) => {
+    if (search !== '') {
+      return `SELECT Count(*) FROM Rides 
+        WHERE riderName LIKE ${search} OR driverName LIKE ${search}`;
+    } else {
+      return `SELECT Count(*) FROM Rides`;
+    }
+  },
   getRideById: () => `SELECT * FROM Rides WHERE rideID=?`,
   createRide: () => 'INSERT INTO Rides(startLat, startLong,' +
         'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +

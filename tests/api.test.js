@@ -313,19 +313,19 @@ describe('API tests', () => {
           request(app)
               .post('/rides')
               .send({
-                  'startLat': 100,
-                  'startLong': 70,
-                  'endLat': 110,
-                  'endLong': 75,
+                  "startLat": 70,
+                  "startLong": 100,
+                  "endLat": 75,
+                  "endLong": 110,
                   'riderName': 'DROP TABLE Rides',
-                  'driverName': 'SaniTize this?><:)(*)',
+                  'driverName': 'SaniTize sample?.>:)(*)',
                   'driverVehicle': 'GJ05RM4297',
               })
               .set('Content-Type', 'application/json')
               .expect(201)
               .expect((res) => {
                   assert.isNotNull(res.body.rideID);
-                  assert.strictEqual(res.body.driverName, 'SaniTize this');
+                  assert.strictEqual(res.body.data.driverName, 'SaniTize sample');
               })
               .end(done);
       });

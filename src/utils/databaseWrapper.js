@@ -52,8 +52,10 @@ const rides = (db) => {
       });
     } else {
       return new Promise((resolve, reject) => {
+        logger.info({values, script});
         db.all(script, (err, rows) => {
           if (err) {
+            logger.info(err.toString());
             reject(err);
           }
 
@@ -88,7 +90,7 @@ const rides = (db) => {
    * Getting all rides
    * @param {number} pageNumber of the required details for paging
    * @param {number} limit of the required details for paging
-   * @param {string} search of the required details for paging
+   * @param {string} search of the not required details for paging
    */
   const getAllRides = async (pageNumber, limit, search) => {
     logger.info({pageNumber, limit, search});
@@ -96,7 +98,16 @@ const rides = (db) => {
     limit===undefined?limit=1:limit;
     return await runDBAllAsync(db, null,
         constant.DB_SCRIPTS.getAllRides(pageNumber,
-        limit, search));
+            limit, search));
+  };
+
+  /**
+   * Getting all rides count
+   * @param {number} search of the required details for paging
+   */
+  const getAllRidesCount = async (search) => {
+    return await runDBAllAsync(db, null,
+        constant.DB_SCRIPTS.getAllRidesCount(search));
   };
 
   /**
@@ -123,6 +134,7 @@ const rides = (db) => {
   return {
     createNewRide,
     getAllRides,
+    getAllRidesCount,
     getRideById,
   };
 };

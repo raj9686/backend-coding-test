@@ -10,7 +10,8 @@
     "test": "nyc mocha tests & npm run lint",
     "start": "node index.js",
     "lint": "eslint ./src --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test:load": "pm2 start npm -- start && artillery run load_test.yml && pm2 stop all"
   },
   "husky": {
     "hooks": {
@@ -33,12 +34,15 @@
     "assert": "^2.0.0",
     "body-parser": "^1.19.0",
     "chai": "^4.3.4",
+    "cluster": "^0.7.7",
     "express": "^4.16.4",
     "lodash": "^4.17.21",
     "npx": "^10.2.2",
     "sqlite3": "^4.0.6"
   },
   "devDependencies": {
+    "artillery": "^1.7.8",
+    "pm2": "^5.1.1",
     "@types/node": "^16.7.10",
     "@typescript-eslint/eslint-plugin": "^2.9.0",
     "@typescript-eslint/parser": "^2.9.0",
