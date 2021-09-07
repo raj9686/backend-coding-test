@@ -10,33 +10,6 @@ const constant = require('../constants');
 const rideController = (db) => {
   const ridesDatabase = databaseWrapper.rides(db);
 
-  /**
-   * Paginate given rows of rides. Return paginated data
-   *
-   * @param {Array} data - rows of rides
-   * @param {Number} pageNo - page number of the result. default is 1
-   * @param {Number} size - number of rides per result. default is 10
-   * @return {{totalItems: *, totalPages: number, page:
-   * number, size: number, data: *}}
-   */
-  const paginate = (data, pageNo=1, size=10) => {
-    /*    const totalPages = Math.ceil(data.length / size);
-
-    // ensure current page isn't out of range
-    if (pageNo > totalPages) {
-      pageNo = totalPages;
-    }*/
-    const pageNumber = 0;
-    return {
-      status: true,
-      message: 'Data fetched successfully',
-      metadata: {
-        totalPageCount: 1,
-        currentPage: 1,
-      },
-      data: data,
-    };
-  };
 
   /**
    * Handle GET /rides request
