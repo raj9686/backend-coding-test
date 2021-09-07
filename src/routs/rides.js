@@ -10,7 +10,6 @@ const constant = require('../constants');
 const rideController = (db) => {
   const ridesDatabase = databaseWrapper.rides(db);
 
-
   /**
    * Handle GET /rides request
    * @param {Object} req - request
@@ -36,26 +35,27 @@ const rideController = (db) => {
     // Business logic
     try {
       const rows = await ridesDatabase.getAllRides(pageNumber, limit, search);
+      const totalRowsCount = await ridesDatabase.getAllRidesCount(search);
       if (rows.length === 0) {
         logger.error('Rides not found');
         return res
             .status(constant.HTTP_CODE.NOT_FOUND)
             .send(errorGenerator.returnResourceNotFoundResponse());
       }
-      // const resp = paginate(rows, pageNumber, size);
+      const totalPages = Math.ceil(totalRowsCount[0]['Count(*)'] / limit);
       return res
           .status(constant.HTTP_CODE.SUCCESSFUL)
           .send({
             status: true,
             message: 'Data fetched successfully',
             metadata: {
-              totalPageCount: 1,
-              currentPage: 1,
+              totalPageCount: totalPages,
+              currentPage: pageNumber,
             },
             data: rows,
           });
     } catch (err) {
-      logger.info({err});
+      logger.info(err.toString());
 
       return res
           .status(constant.HTTP_CODE.SERVER_ERROR)
@@ -126,8 +126,8 @@ const rideController = (db) => {
     const startLongitude = Number(req.body.startLong);
     const endLatitude = Number(req.body.endLat);
     const endLongitude = Number(req.body.endLong);
-    const riderName = String(req.body.riderName);
-    const driverName = String(req.body.driverName);
+    const riderName = String(req.body.riderName).replace(/[^\w\s]/gi, '');
+    const driverName = String(req.body.driverName).replace(/[^\w\s]/gi, '');
     const driverVehicle = String(req.body.driverVehicle);
 
     // Business logic
