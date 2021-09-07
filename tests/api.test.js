@@ -3,6 +3,7 @@
 const request = require('supertest');
 const assert = require('chai').assert;
 const _ = require('lodash');
+const {loggers} = require("winston");
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
@@ -86,6 +87,7 @@ describe('API tests', () => {
                   .query({ limit: 1,pageNumber:1 })
                   .expect(200)
                   .expect((getResponse) => {
+                      console.log("getResponse",getResponse)
                       assert(getResponse.body.status);
                   })
                   .end(done);
@@ -123,14 +125,29 @@ describe('API tests', () => {
     });
 
     it('should use default value if not given', (done) => {
-      prepareData();
-      request(app)
-          .get('/rides')
-          .expect(404)
-          .expect((res) => {
-            assert.strictEqual(res.body.error_code,'RESOURCE_NOT_FOUND');
-          })
-          .end(done);
+        request(app)
+            .post('/rides')
+            .send({
+                "startLat": 70,
+                "startLong": 100,
+                "endLat": 75,
+                "endLong": 110,
+                "riderName": "Rajesh",
+                "driverName": "Roy Miller",
+                "driverVehicle": "GJ05RM4297"
+            })
+            .set('Content-Type', 'application/json')
+            .expect(201)
+            .then((res) => {
+                request(app)
+                    .get('/rides')
+                    .expect(200)
+                    .expect((res) => {
+                        assert.strictEqual(res.body.status,true);
+                    })
+                    .end(done);
+            });
+
     });
   });
 

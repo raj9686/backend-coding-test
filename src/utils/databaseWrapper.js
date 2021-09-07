@@ -74,8 +74,10 @@ const rides = (db) => {
 
   /**
    * Getting all rides
-   *
-   * @return {Promise<any>} - all rows from ride table
+   * @param {sqlite3.Database} db
+   * @param {number} pageNumber of the required details for paging
+   * @param {number} limit of the required details for paging
+   * @param {string} search of the required details for paging
    */
   const getAllRides = async (pageNumber, limit, search) => {
     pageNumber===undefined?pageNumber=1:pageNumber;
