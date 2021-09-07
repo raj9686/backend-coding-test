@@ -35,7 +35,6 @@ const rideController = (db) => {
     const search = (req.query.search!==undefined?req.query.search:'' );
     // Business logic
     try {
-      logger.error({pageNumber, limit, search});
       const rows = await ridesDatabase.getAllRides(pageNumber, limit, search);
       if (rows.length === 0) {
         logger.error('Rides not found');
@@ -56,7 +55,7 @@ const rideController = (db) => {
             data: rows,
           });
     } catch (err) {
-      logger.info(err.toString());
+      logger.info({err});
 
       return res
           .status(constant.HTTP_CODE.SERVER_ERROR)
@@ -116,7 +115,6 @@ const rideController = (db) => {
     // Validating request
     const validation = requestValidator.isPostRidesRequestInvalid(req);
     if (validation.result) {
-      logger.error('Validation error');
       return res
           .status(constant.HTTP_CODE.VALIDATION_ERROR)
           .send(errorGenerator
@@ -139,7 +137,6 @@ const rideController = (db) => {
     try {
       const riderId = await ridesDatabase.createNewRide(values);
       const result = await ridesDatabase.getRideById(riderId);
-      logger.error('result[0]', result[0]);
       return res
           .status(constant.HTTP_CODE.CREATED)
           .send({
