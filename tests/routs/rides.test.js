@@ -11,20 +11,20 @@ const mockRequest = require('../helpers/mockRequestResponse').mockRequest;
 const mockResponse = require('../helpers/mockRequestResponse').mockResponse;
 
 const insertRides = async () => {
-  const data = {
-    'start_long': 100,
-    'start_lat': 70,
-    'end_long': 110,
-    'end_lat': 75,
-    'rider_name': 'Max',
-    'driver_name': 'John',
-    'driver_vehicle': 'Car',
+  const data =  {
+    "startLat": 90,
+    "startLong": 100,
+    "endLat": 45,
+    "endLong": 65,
+    "riderName": "Bob Marakis",
+    "driverName": "Joy Walter",
+    "driverVehicle": "XD054585"
   };
   const values = [data.start_lat, data.start_long,
     data.end_lat, data.end_long, data.rider_name,
     data.driver_name, data.driver_vehicle];
 
-  return db.run('INSERT INTO Rides(startLat, startLong,' +
+   db.run('INSERT INTO Rides(startLat, startLong,' +
     'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
     '(?, ?, ?, ?, ?, ?, ?)', values, function(err) {
     if (err) {

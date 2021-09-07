@@ -42,13 +42,13 @@ const DB_SCRIPTS = {
     }
 
     if (search !== '') {
-      return `SELECT * FROM Rides LIMIT ${limit} ${','+offset>0?offset:''}
+      return `SELECT * FROM Rides LIMIT ${limit}${','+offset>0?offset:''}
       WHERE riderName LIKE ${search} OR driverName LIKE ${search}`;
     } else {
-      return `SELECT * FROM Rides LIMIT ${limit} ${','+offset>0?offset:''}`;
+      return `SELECT * FROM Rides LIMIT ${limit}${','+offset>0?offset:''}`;
     }
   },
-  getRideById: (id) => `SELECT * FROM Rides WHERE rideID='${id}'`,
+  getRideById: () => `SELECT * FROM Rides WHERE rideID=?`,
   createRide: () => 'INSERT INTO Rides(startLat, startLong,' +
         'endLat, endLong, riderName, driverName, driverVehicle) VALUES' +
         '(?, ?, ?, ?, ?, ?, ?)',

@@ -214,13 +214,13 @@ describe('API tests', () => {
       request(app)
           .post('/rides')
           .send({
-            'start_long': 200,
-            'start_lat': 200,
-            'end_long': 110,
-            'end_lat': 75,
-            'rider_name': 'Max',
-            'driver_name': 'John',
-            'driver_vehicle': 'Car',
+            'startLat': 200,
+            'startLong': 200,
+            'endLat': 110,
+            'endLong': 75,
+            'riderName': 'Rajesh',
+            'driverName': 'Roy Miller',
+            'driverVehicle': 'GJ05RM4297'
           })
           .set('Content-Type', 'application/json')
           .expect(400)
@@ -234,13 +234,13 @@ describe('API tests', () => {
       request(app)
           .post('/rides')
           .send({
-            'start_long': 100,
-            'start_lat': 70,
-            'end_long': 200,
-            'end_lat': 200,
-            'rider_name': 'Max',
-            'driver_name': 'John',
-            'driver_vehicle': 'Car',
+            'startLat': 100,
+            'startLong': 70,
+            'endLat': 200,
+            'endLong': 200,
+              'riderName': 'Rajesh',
+              'driverName': 'Roy Miller',
+              'driverVehicle': 'GJ05RM4297'
           })
           .set('Content-Type', 'application/json')
           .expect(400)
@@ -254,13 +254,13 @@ describe('API tests', () => {
       request(app)
           .post('/rides')
           .send({
-            'start_long': 100,
-            'start_lat': 70,
-            'end_long': 110,
-            'end_lat': 75,
-            'rider_name': '',
-            'driver_name': 'John',
-            'driver_vehicle': 'Car',
+              'startLat': 100,
+              'startLong': 70,
+              'endLat': 110,
+              'endLong': 70,
+              'riderName': '',
+              'driverName': 'Roy Miller',
+              'driverVehicle': 'GJ05RM4297'
           })
           .set('Content-Type', 'application/json')
           .expect(400)
@@ -274,13 +274,13 @@ describe('API tests', () => {
       request(app)
           .post('/rides')
           .send({
-            'start_long': 100,
-            'start_lat': 70,
-            'end_long': 110,
-            'end_lat': 75,
-            'rider_name': 'Max',
-            'driver_name': '',
-            'driver_vehicle': 'Car',
+              'startLat': 100,
+              'startLong': 70,
+              'endLat': 110,
+              'endLong': 70,
+              'riderName': 'Raj',
+              'driverName': '',
+              'driverVehicle': 'GJ05RM4297'
           })
           .set('Content-Type', 'application/json')
           .expect(400)
@@ -294,13 +294,13 @@ describe('API tests', () => {
       request(app)
           .post('/rides')
           .send({
-            'start_long': 100,
-            'start_lat': 70,
-            'end_long': 110,
-            'end_lat': 75,
-            'rider_name': 'Max',
-            'driver_name': 'John',
-            'driver_vehicle': '',
+              'startLat': 100,
+              'startLong': 70,
+              'endLat': 110,
+              'endLong': 70,
+              'riderName': 'Raj',
+              'driverName': 'Sita',
+              'driverVehicle': ''
           })
           .set('Content-Type', 'application/json')
           .expect(400)
@@ -309,5 +309,25 @@ describe('API tests', () => {
           })
           .end(done);
     });
+      it('should not delete the DB', (done) => {
+          request(app)
+              .post('/rides')
+              .send({
+                  'startLat': 100,
+                  'startLong': 70,
+                  'endLat': 110,
+                  'endLong': 75,
+                  'riderName': 'DROP TABLE Rides',
+                  'driverName': 'SaniTize this?><:)(*)',
+                  'driverVehicle': 'GJ05RM4297',
+              })
+              .set('Content-Type', 'application/json')
+              .expect(201)
+              .expect((res) => {
+                  assert.isNotNull(res.body.rideID);
+                  assert.strictEqual(res.body.driverName, 'SaniTize this');
+              })
+              .end(done);
+      });
   });
 });
