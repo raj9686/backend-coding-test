@@ -36,12 +36,16 @@ const DB_SCRIPTS = {
         `(${tableContent})`,
   getAllRides: (pageNumber, limit, search) => {
     pageNumber>1?--pageNumber:pageNumber;
-    const offset = pageNumber * limit;
+    let offset = 0;
+    if (pageNumber!==1) {
+      offset = pageNumber * limit;
+    }
+
     if (search !== '') {
-      return `SELECT * FROM Rides LIMIT ${limit}, ${offset}
+      return `SELECT * FROM Rides LIMIT ${limit} ${','+offset>0?offset:''}
       WHERE riderName LIKE ${search} OR driverName LIKE ${search}`;
     } else {
-      return `SELECT * FROM Rides LIMIT ${limit}, ${offset}`;
+      return `SELECT * FROM Rides LIMIT ${limit} ${','+offset>0?offset:''}`;
     }
   },
   getRideById: (id) => `SELECT * FROM Rides WHERE rideID='${id}'`,
