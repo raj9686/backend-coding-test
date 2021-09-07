@@ -74,7 +74,6 @@ const rides = (db) => {
 
   /**
    * Getting all rides
-   * @param {sqlite3.Database} db
    * @param {number} pageNumber of the required details for paging
    * @param {number} limit of the required details for paging
    * @param {string} search of the required details for paging
@@ -83,7 +82,8 @@ const rides = (db) => {
     pageNumber===undefined?pageNumber=1:pageNumber;
     limit===undefined?limit=1:limit;
     logger.info(constant.DB_SCRIPTS.getAllRides(pageNumber, limit, search));
-    return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides(pageNumber, limit, search));
+    return await runDBAllAsync(db, constant.DB_SCRIPTS.getAllRides(pageNumber,
+        limit, search));
   };
 
   /**
