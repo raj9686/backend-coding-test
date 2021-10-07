@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "The API provides simple RESTful HTTP and streaming interfaces for exploring and interacting rides viewing, availability and booking."
   version: "1.0.0"
-  title: "Rides Information API"
+  title: "Rides Information API...."
 host: "localhost:8010"
 tags:
   - name: "rides"
@@ -31,7 +31,13 @@ paths:
       parameters:
         - name: "pageNumber"
           in: "path"
-          description: "This is Page number which starts with 0, and should increase by 1 in next call"
+          description: "Avtish Kakadiya"
+          required: true
+          type: integer
+          format: "int64"
+        - name: "pag"
+          in: "path"
+          description: "Avtish Kakadiya"
           required: true
           type: integer
           format: "int64"
